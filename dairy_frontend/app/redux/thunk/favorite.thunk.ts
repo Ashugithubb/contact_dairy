@@ -8,13 +8,14 @@ export const toggleFavorite = createAsyncThunk(
   'like/unlike',
   async (id: number, thunkAPI) => {
         try {
-            const response = await axios.post(
+            const response = await axios.patch(
                 `http://localhost:3001/contact/${id}`,
 
                 { withCredentials: true }
             );
             console.log("responses",response.data)
-            return response.data;
+            return {id, ...response.data};
+            // return {id};
         } catch (error: any) {
             const errorMessage =
                 error.response?.data?.message || 'Something went wrong';

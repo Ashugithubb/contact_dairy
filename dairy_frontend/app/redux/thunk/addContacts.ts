@@ -5,7 +5,7 @@ import axios from 'axios';
 import z from 'zod';
 
 
-export const addFeedback = createAsyncThunk(
+export const addContact = createAsyncThunk(
   'add/contact',
   async (data: CreateContactFormData, thunkAPI) => {
     try {

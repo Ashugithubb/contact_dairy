@@ -21,39 +21,27 @@ export class ContactService {
     @InjectRepository(ContactTag) private readonly contactTagRepo: Repository<ContactTag>
   ) { }
 
-  // async create(createContactDto: CreateContactDto, userId: number) {
-  //   const users = await this.userRepo.findOneBy({ userId });
-  //   const { firstName, lastName, email, nickName, phoneNumbers,tags } = createContactDto;
 
-  //   if (!users) throw new NotFoundException("User Not Found");
-
-  //   const contact = this.contactRepo.create({
-  //     firstName,
-  //     lastName,
-  //     nickName,
-  //     email,
-  //     userId,
-  //     users
-  //   })
-  //   await this.contactRepo.save(contact);
-
-  //   await this.phoneService.create(phoneNumbers, contact)
-  //   return { "msg": "Contact Saved" }
-  // }
+  async uplodImage(file: Express.Multer.File) {
+    const avtarUrl = 'http://localhost:3001/files/' + file.filename;
+    return avtarUrl;
+  }
 
   async create(createContactDto: CreateContactDto, userId: number) {
+    const { firstName, lastName, email, nickName, phoneNumbers, tags, avtarUrl } = createContactDto;
+
     const user = await this.userRepo.findOneBy({ userId });
-    if (!user) throw new UnauthorizedException("Please LogedId to add Contact");
-    const { firstName, lastName, email, nickName, phoneNumbers, tags } = createContactDto;
+
 
     const tagsToBeAdded = await this.tagService.create(tags);
 
-    const exsitingContact = await this.contactRepo.find({
-      where:{email,
+    const exsitingContact = await this.contactRepo.findOne({
+      where: {
+        email,
         userId
       }
     })
-    if(exsitingContact) throw new ConflictException("Already Contact exists");
+    if (exsitingContact) throw new ConflictException("Already Contact exists");
 
     const tagsIds = tagsToBeAdded?.map((t: Tag) => t.id);
     const newContact = await this.contactRepo.create({
@@ -61,8 +49,9 @@ export class ContactService {
       lastName,
       nickName,
       email,
+      avtarUrl,
       userId,
-      users: user
+      users: user!
     })
     const contact = await this.contactRepo.save(newContact);
     await this.phoneService.create(phoneNumbers, contact)
@@ -83,22 +72,17 @@ export class ContactService {
 
   }
 
-
-
-
-
-
-
-
   async toggleFavourite(contactId: number) {
     const contact = await this.contactRepo.findOneBy({ id: contactId });
     if (!contact) throw new NotFoundException();
-    if (contact.favorite === true) {
-      contact.favorite = false;
-    }
-    if (contact.favorite === false) {
-      contact.favorite = true;
-    }
+    // if (contact.isFavorite()) {
+    //   contact.markUnfavrate()
+    // }
+
+    // else{
+    //   contact.markFavrate()
+    // }
+    contact.toggelFaverate();
     await this.contactRepo.save(contact);
     return { "msg": "Contact Added To favourite" }
   }
@@ -130,7 +114,8 @@ export class ContactService {
       limit = 5,
       searchValue,
       tags,
-      deleted
+      deleted,
+      favorite
     } = query;
     const qb = this.contactRepo
       .createQueryBuilder("contacts")
@@ -153,6 +138,20 @@ export class ContactService {
         contacts,
       };
     }
+    if (favorite === "true") {
+      qb.andWhere("contacts.favorite = :fav", { fav: true });
+      const [contacts, total] = await qb
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getManyAndCount();
+      return {
+        total,
+        page,
+        limit,
+        contacts,
+      };
+    }
+
     if (searchValue) {
       qb.andWhere(
         '(contacts.firstName ILIKE :search OR contacts.lastName ILIKE :search)',
@@ -176,20 +175,38 @@ export class ContactService {
   }
 
 
-
-
-
-
-  findAll() {
-    return `This action returns all contact`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} contact`;
-  }
-
-  update(id: number, updateContactDto: UpdateContactDto) {
-    return `This action updates a #${id} contact`;
-  }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// async create(createContactDto: CreateContactDto, userId: number) {
+//   const users = await this.userRepo.findOneBy({ userId });
+//   const { firstName, lastName, email, nickName, phoneNumbers,tags } = createContactDto;
+
+//   if (!users) throw new NotFoundException("User Not Found");
+
+//   const contact = this.contactRepo.create({
+//     firstName,
+//     lastName,
+//     nickName,
+//     email,
+//     userId,
+//     users
+//   })
+//   await this.contactRepo.save(contact);
+
+//   await this.phoneService.create(phoneNumbers, contact)
+//   return { "msg": "Contact Saved" }
+// }

@@ -14,10 +14,12 @@ import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import { IconButton, Stack } from '@mui/material';
 import { toggleContactStatus } from "../redux/thunk/toggleStatus";
 import { toast, ToastContainer } from "react-toastify";
-import ContactForm from "../component/AddContact";
+import ContactForm from "../component/ContactForm";
 import AddIcon from '@mui/icons-material/Add';
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { toggleFavorite } from "../redux/thunk/favorite.thunk";
+import { editContact } from "../redux/thunk/editContact";
+import EditContactForm from "../component/EditContactForm";
 
 
 export default function Home() {
@@ -28,11 +30,17 @@ export default function Home() {
     const [selectedTags, setSelectedTags] = useState<TagDetails[]>([]);
 
     const [addContact, setAddContact] = useState(false);
+    const [edit,setEdit] = useState(false);
 
+    const [contactId,setContactId] = useState<number>(-1);
 
     const contactslist = useAppSelector((state) => state.contact.contactlist)
 
+
+    console.log("contactlist", contactslist);
+
     const [selected, setSelected] = useState(false);
+    const [fav,setFav] = useState(false);
 
     const { page = 1, limit = 0, total = 0, contacts } = contactslist ?? {}
 
@@ -53,12 +61,13 @@ export default function Home() {
                     tags: selectedTags.map((t) => t.id),
                     limit: 5,
                     deleted: selected ?? false,
+                    favorite:fav??false
                 })
             );
         }, 500);
 
         return () => clearTimeout(debounce);
-    }, [searchValue, dispatch, selectedTags, selected]);
+    }, [searchValue, dispatch, selectedTags, selected,fav]);
 
     const handelDeleteAndRestore = async (id: number) => {
         const res = await dispatch(toggleContactStatus(id));
@@ -70,7 +79,9 @@ export default function Home() {
         }
     }
     const handleToggle = async (id: number) => {
-        const res = await dispatch(toggleFavorite(id));
+        const res = await dispatch(toggleFavorite(id)); /// API
+
+
         if (res.meta.requestStatus === 'fulfilled') {
             toast.success("toggled Favorite");
 
@@ -78,12 +89,19 @@ export default function Home() {
             toast.error(res.payload || "failed");
         }
     }
+    
+    const handelEdit = (id: number) => {
+        setContactId(id);
+        setEdit(true);
+    }
+
 
 
     return (<>
         <Navbar />
         <ToastContainer />
         {addContact && <ContactForm />}
+        {edit && <EditContactForm id= {contactId}/>}
         <Box display="flex" gap={2} flexWrap="wrap" sx={{ marginTop: "5px" }}>
             <TextField
                 label="first name or lastName"
@@ -109,9 +127,22 @@ export default function Home() {
             >
                 {selected ? <DeleteIcon /> : <DeleteOutlineIcon />}
             </ToggleButton>
-            <IconButton color="primary" onClick={() => setAddContact(true)}>
+
+            <ToggleButton
+                value="check"
+                selected={fav}
+                onChange={() => setFav(!fav)}
+            >
+                {fav ? <Favorite /> : <FavoriteBorder />}
+            </ToggleButton>
+            
+
+            <IconButton color="primary" onClick={() => setAddContact(!addContact)}>
                 <AddIcon fontSize="large" />
             </IconButton>
+
+
+
         </Box>
 
         <TableContainer component={Paper}>
@@ -164,12 +195,11 @@ export default function Home() {
                                         {row.deletedAt === null && (
                                             row.favorite ? <Favorite color="error" /> : <FavoriteBorder />
                                         )}
-
                                     </IconButton>
+                                   <IconButton onClick={()=>handelEdit(row.id)}>{row.deletedAt === null && (<EditIcon/>)}</IconButton>
                                 </Stack>
                             </TableCell>
                         </TableRow>
-
                     ))}
                 </TableBody>
             </Table>

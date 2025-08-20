@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
             const res = await axios.post('http://localhost:3001/auth/logout');
 
             localStorage.clear();
-            router.push('/login')
+            router.push('/login');
         }
         catch (err) {
             console.log(err)

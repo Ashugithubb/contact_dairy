@@ -1,4 +1,4 @@
-import { IsArray, IsString } from "class-validator"
+import { IsArray, IsOptional, IsString } from "class-validator"
 import { CreatePhoneNumberDto } from "src/phone-number/dto/create-phone-number.dto"
 
 export class CreateContactDto {
@@ -21,5 +21,9 @@ export class CreateContactDto {
     @IsArray()
     @IsString({ each: true })
     tags: string[]
+
+    @IsString()
+    @IsOptional()
+    avtarUrl:string
 
 }

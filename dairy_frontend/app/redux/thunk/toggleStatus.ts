@@ -17,7 +17,7 @@ export const toggleContactStatus = createAsyncThunk(
 
                 { withCredentials: true }
             );
-            return response.data;
+            return {id,...response.data};
         } catch (error: any) {
             const errorMessage =
                 error.response?.data?.message || 'Something went wrong';

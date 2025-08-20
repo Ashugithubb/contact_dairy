@@ -37,7 +37,8 @@ export default function SignupForm() {
     } = useForm<SignupFormData>({
         resolver: zodResolver(signupSchema),
         defaultValues: {
-            userName: '',
+            firstName: '',
+            lastName:'',
             email: '',
             password: '',
             confirmPassword: '',
@@ -73,13 +74,23 @@ export default function SignupForm() {
                     <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
                         <TextField
-                            label="user Name"
-                            {...register('userName')}
-                            error={!!errors.userName}
-                            helperText={errors.userName?.message}
+                            label="first Name"
+                            {...register('firstName')}
+                            error={!!errors.firstName}
+                            helperText={errors.firstName?.message}
                             fullWidth
                             margin="normal"
                         />
+                    
+                     <TextField
+                            label="last Name"
+                            {...register('lastName')}
+                            error={!!errors.lastName}
+                            helperText={errors.lastName?.message}
+                            fullWidth
+                            margin="normal"
+                        />
+
 
                         <TextField
                             label="Email"

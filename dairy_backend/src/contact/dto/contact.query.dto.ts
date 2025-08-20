@@ -1,5 +1,7 @@
 import { IsArray, IsBoolean, IsEnum, IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
+import { boolean } from 'zod';
+
 
 export class GetContactQueryDto {
   @IsOptional()
@@ -30,5 +32,14 @@ export class GetContactQueryDto {
   @IsString()
   @Type(()=>String)
   deleted?:string
-  
+
+  // @IsOptional()
+  // @IsBoolean()
+  // @Type(()=>boolean)
+  // favorite?:boolean
+
+  @IsOptional()
+  @IsString()
+  @Type(()=>String)
+  favorite?:string
 }

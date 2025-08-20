@@ -49,4 +49,9 @@ export class Contact {
     avtarUrl: string
 
 
+    toggelFaverate(){
+         this.favorite=!this.favorite;
+    }
+
+
 }
