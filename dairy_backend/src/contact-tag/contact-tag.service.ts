@@ -12,7 +12,7 @@ export class ContactTagService {
   constructor(@InjectRepository(ContactTag) private readonly contactTagRepositry: Repository<ContactTag>,
     @InjectRepository(Contact) private readonly contactRepositry: Repository<Contact>,
     private readonly tagService: TagService) { }
-
+    
   async create(createContactTagDto: CreateContactTagDto) {
     
     const { contactIds, tags } = createContactTagDto;

@@ -91,8 +91,10 @@ export default function Home() {
     }
     
     const handelEdit = (id: number) => {
+        console.log("clicked");
         setContactId(id);
-        setEdit(true);
+        setEdit(!edit);
+        console.log("edit",edit);
     }
 
 

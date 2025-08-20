@@ -173,7 +173,11 @@ export class ContactService {
       contacts,
     };
   }
+async updateContact(id:number,updateContact:UpdateContactDto){
+  const {phoneNumbers,tags,...rest}= updateContact
+  return await this.contactRepo.update(id,rest);
 
+} 
 
 }
 

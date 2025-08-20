@@ -12,8 +12,8 @@ import { diskStorage } from 'multer';
 export class ContactController {
   constructor(private readonly contactService: ContactService) { }
 
-  @UseGuards(JwtAuthGuard)
   
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createContactDto: CreateContactDto, @Req() req) {
 
@@ -28,9 +28,6 @@ export class ContactController {
     const userId = req.user.id
     return this.contactService.getContacts(query, userId);
   }
-
-
-
 
 
   @Post('upload')
@@ -51,7 +48,12 @@ export class ContactController {
   }
 
 
-  @Patch(':id')
+  @Patch(":id")
+  update(@Param('id') id: string,@Body()updateContact:UpdateContactDto){
+    return this.contactService.updateContact(+id,updateContact);
+  }
+  
+  @Patch(':id/favourite')
   favourite(@Param('id') id: string) {
     return this.contactService.toggleFavourite(+id);
   }

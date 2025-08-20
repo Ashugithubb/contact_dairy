@@ -18,8 +18,8 @@ import { addContact } from '../redux/thunk/addContacts';
 import { editContact } from '../redux/thunk/editContact';
 
 export default function EditContactForm(props: { id: number }) {
-   
-    const [open, setOpen] = useState(false);
+   const id=props.id;
+    const [open, setOpen] = useState(true);
     const contacts = useAppSelector((state) => state.contact.contactlist?.contacts)
 
     const contact = contacts?.filter((c) => (c.id === props.id));
@@ -32,7 +32,7 @@ export default function EditContactForm(props: { id: number }) {
    
 
 
-    console.log("contact", contact);
+    
 
     const {
         register,
@@ -55,14 +55,14 @@ export default function EditContactForm(props: { id: number }) {
     const dispatch = useAppDispatch();
 
     const handleClose = () => {
-        setOpen(!open);
+        setOpen(false);
     }
     const onSubmit = async (data: CreateContactFormData) => {
         data.avtarUrl = avtarUrl;
         console.log(data);
-        const res = await dispatch(editContact(data));
+        const res = await dispatch(editContact({data,id}));
         if (res.meta.requestStatus === 'fulfilled') {
-            toast.success("Contacted added successfully!");
+            toast.success("Contacted Updated successfully!");
 
         } else {
             toast.error(res.payload || "Failed");
@@ -86,9 +86,9 @@ export default function EditContactForm(props: { id: number }) {
     return (
         <Dialog
             open={open}
-            onClose={() => { handleClose }}
+            onClose={handleClose }
         >
-            <DialogTitle>Add Feedback</DialogTitle>
+            <DialogTitle>Add Contact</DialogTitle>
             <ToastContainer />
             <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: "50px" }}>
                 <Box sx={{ position: "relative", display: "inline-block" }}>

@@ -42,6 +42,9 @@ export class Contact {
     @OneToMany(() => ContactTag, (c) => c.contact)
     contactTag: ContactTag[]
 
+    // @ManyToMany(()=>Tag,(tags)=>tags.contacts)
+    // tags:Tag
+
     @OneToMany(() => PhoneNumber, (p) => p.PhoneNumberContact)
     phoneNumbers: PhoneNumber[]
 

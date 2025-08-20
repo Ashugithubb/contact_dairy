@@ -12,4 +12,7 @@ export class Tag {
 
     @OneToMany(() => ContactTag, (c) => c.tag)
     contactTag: ContactTag
+
+    // @ManyToMany(()=>Contact,(contact)=>contact.tags)
+    //  contacts:Contact[]
 }

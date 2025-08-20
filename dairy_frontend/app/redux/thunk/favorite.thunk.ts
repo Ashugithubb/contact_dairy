@@ -9,13 +9,13 @@ export const toggleFavorite = createAsyncThunk(
   async (id: number, thunkAPI) => {
         try {
             const response = await axios.patch(
-                `http://localhost:3001/contact/${id}`,
+                `http://localhost:3001/contact/${id}/favourite`,
 
                 { withCredentials: true }
             );
             console.log("responses",response.data)
             return {id, ...response.data};
-            // return {id};
+            
         } catch (error: any) {
             const errorMessage =
                 error.response?.data?.message || 'Something went wrong';

@@ -11,10 +11,10 @@ import z from 'zod';
 
 export const editContact = createAsyncThunk(
     'contact/edit',
-    async (data: CreateContactFormData, thunkAPI) => {
+    async ({data,id}: {data:CreateContactFormData,id:number}, thunkAPI) => {
         try {
-            const response = await axios.post(
-                'http://localhost:3001/contact',
+            const response = await axios.patch(
+                `http://localhost:3001/contact/${id}`,
                 data,
                 { withCredentials: true }
             );
