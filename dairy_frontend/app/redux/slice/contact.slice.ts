@@ -12,12 +12,10 @@ export interface phone {
   phoneNumber: string
 }
 export interface ContactTag {
-  id: number;
-  tag: {
     id: number,
     tagName: string
-  }
 }
+
 
 export interface Contact {
   id: number,
@@ -28,7 +26,7 @@ export interface Contact {
   favorite: boolean,
   avtarUrl: string
   deletedAt: string | null;
-  contactTag: ContactTag[];
+  tags: ContactTag[];
   phoneNumbers: phone[]
 }
 

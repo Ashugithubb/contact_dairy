@@ -8,9 +8,9 @@ export class ContactTag {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Contact, (c) => c.contactTag)
-    contact: Contact
+    // @ManyToOne(() => Contact, (c) => c.contactTag)
+    // contact: Contact
 
-    @ManyToOne(() => Tag, (t) => t.contactTag)
-    tag: Tag
+    // @ManyToOne(() => Tag, (t) => t.contactTag)
+    // tag: Tag
 }

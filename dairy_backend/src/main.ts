@@ -12,7 +12,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: process.env.CLIENT_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   });
@@ -20,6 +20,14 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();
+
+
+
+
+
+
+
+
 
 
 //npm run migration:generate -- src/migrations/addedManyTables

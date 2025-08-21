@@ -1,6 +1,6 @@
 import { ContactTag } from "src/contact-tag/entities/contact-tag.entity";
 import { Contact } from "src/contact/entities/contact.entity";
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('tags')
 export class Tag {
@@ -10,9 +10,10 @@ export class Tag {
     @Column({unique:true})
     tagName: string
 
-    @OneToMany(() => ContactTag, (c) => c.tag)
-    contactTag: ContactTag
+    // @OneToMany(() => ContactTag, (c) => c.tag)
+    // contactTag: ContactTag
 
-    // @ManyToMany(()=>Contact,(contact)=>contact.tags)
-    //  contacts:Contact[]
+    @ManyToMany(()=>Contact,(contact)=>contact.tags)
+    
+    contacts:Contact[]
 }

@@ -7,11 +7,11 @@ import { UpdateContactTagDto } from './dto/update-contact-tag.dto';
 export class ContactTagController {
   constructor(private readonly contactTagService: ContactTagService) {}
 
-  @Post()
-  create(@Body() createContactTagDto: CreateContactTagDto) {
-    console.log("inside controller",createContactTagDto)
-    return this.contactTagService.create(createContactTagDto);
-  }
+  //@Post()
+  // create(@Body() createContactTagDto: CreateContactTagDto) {
+  //   console.log("inside controller",createContactTagDto)
+  //   return this.contactTagService.create(createContactTagDto);
+  // }
 
   @Get()
   findAll() {

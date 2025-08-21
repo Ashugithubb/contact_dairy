@@ -39,11 +39,22 @@ export class Contact {
     @DeleteDateColumn()
     deletedAt: Date
 
-    @OneToMany(() => ContactTag, (c) => c.contact)
-    contactTag: ContactTag[]
+    // @OneToMany(() => ContactTag, (c) => c.contact)
+    // contactTag: ContactTag[]
 
-    // @ManyToMany(()=>Tag,(tags)=>tags.contacts)
-    // tags:Tag
+    @ManyToMany(() => Tag, (tags) => tags.contacts, { cascade: true })
+    @JoinTable({
+        name: "contact_tag",
+        joinColumn: {
+            name: "contact_id",
+            referencedColumnName: "id",
+        },
+        inverseJoinColumn: {
+            name: "tag_id",
+            referencedColumnName: "id",
+        },
+    })
+    tags: Tag[]
 
     @OneToMany(() => PhoneNumber, (p) => p.PhoneNumberContact)
     phoneNumbers: PhoneNumber[]
@@ -52,8 +63,8 @@ export class Contact {
     avtarUrl: string
 
 
-    toggelFaverate(){
-         this.favorite=!this.favorite;
+    toggelFaverate() {
+        this.favorite = !this.favorite;
     }
 
 

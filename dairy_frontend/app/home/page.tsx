@@ -175,7 +175,7 @@ export default function Home() {
                             </TableCell>
                             <TableCell >{row.nickName}</TableCell>
                             <TableCell sx={{ maxWidth: 150, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} >{row.email}</TableCell>
-                            <TableCell >{row.contactTag.map((m, indx) => <Chip key={indx} label={m.tag.tagName} size="small" sx={{ mr: 0.5 }} />)}</TableCell>
+                            <TableCell >{row.tags.map((m, indx) => <Chip key={indx} label={m.tagName} size="small" sx={{ mr: 0.5 }} />)}</TableCell>
 
                             <TableCell>
                                 {row.phoneNumbers.map((num, idx) => (

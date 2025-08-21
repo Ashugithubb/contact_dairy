@@ -32,7 +32,6 @@ export class ContactService {
 
     const user = await this.userRepo.findOneBy({ userId });
 
-
     const tagsToBeAdded = await this.tagService.create(tags);
 
     const exsitingContact = await this.contactRepo.findOne({
@@ -59,15 +58,13 @@ export class ContactService {
 
     const tagsAssigned: ContactTag[] = [];
 
-    tagsIds.forEach((t: number) => {
-      const assignedTag = this.contactTagRepo.create({
-        contact: { id: contactId },
-        tag: { id: t }
+    tagsIds.forEach(async (t: number) => {
+      await this.contactRepo.save({
+        id: contactId,
+        tags: [{ id: t }],
       });
-      tagsAssigned.push(assignedTag);
-    });
-    const contactAssigned = await this.contactTagRepo.save(tagsAssigned);
-
+    })
+   
     return "contact Added";
 
   }
@@ -75,13 +72,6 @@ export class ContactService {
   async toggleFavourite(contactId: number) {
     const contact = await this.contactRepo.findOneBy({ id: contactId });
     if (!contact) throw new NotFoundException();
-    // if (contact.isFavorite()) {
-    //   contact.markUnfavrate()
-    // }
-
-    // else{
-    //   contact.markFavrate()
-    // }
     contact.toggelFaverate();
     await this.contactRepo.save(contact);
     return { "msg": "Contact Added To favourite" }
@@ -119,8 +109,7 @@ export class ContactService {
     } = query;
     const qb = this.contactRepo
       .createQueryBuilder("contacts")
-      .leftJoinAndSelect("contacts.contactTag", "contactTag")
-      .leftJoinAndSelect("contactTag.tag", "tag")
+      .leftJoinAndSelect("contacts.tags", "tag")
       .leftJoinAndSelect("contacts.phoneNumbers", "phoneNumber")
 
     qb.andWhere("contacts.userId = :userId", { userId });
@@ -159,9 +148,9 @@ export class ContactService {
       );
     }
 
-    if (tags) {
-      qb.andWhere('tag.id IN (:...tagIds)', { tagIds: tags });
-    }
+   if (tags && tags.length > 0) {
+  qb.andWhere('tag.id IN (:...tagIds)', { tagIds: tags });
+}
     const [contacts, total] = await qb
       .skip((page - 1) * limit)
       .take(limit)
@@ -173,11 +162,11 @@ export class ContactService {
       contacts,
     };
   }
-async updateContact(id:number,updateContact:UpdateContactDto){
-  const {phoneNumbers,tags,...rest}= updateContact
-  return await this.contactRepo.update(id,rest);
+  async updateContact(id: number, updateContact: UpdateContactDto) {
+    const { phoneNumbers, tags, ...rest } = updateContact
+    return await this.contactRepo.update(id, rest);
 
-} 
+  }
 
 }
 

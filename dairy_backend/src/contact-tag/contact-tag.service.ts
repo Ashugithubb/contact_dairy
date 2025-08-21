@@ -13,31 +13,31 @@ export class ContactTagService {
     @InjectRepository(Contact) private readonly contactRepositry: Repository<Contact>,
     private readonly tagService: TagService) { }
     
-  async create(createContactTagDto: CreateContactTagDto) {
+  // async create(createContactTagDto: CreateContactTagDto) {
     
-    const { contactIds, tags } = createContactTagDto;
+  //   const { contactIds, tags } = createContactTagDto;
 
-    const tagsToBeAdded = await this.tagService.create(tags);
+  //   const tagsToBeAdded = await this.tagService.create(tags);
 
-    const tagsIds = tagsToBeAdded?.map((t: Tag) => t.id);
+  //   const tagsIds = tagsToBeAdded?.map((t: Tag) => t.id);
  
-    const tagsAssigned: ContactTag[] = [];
+  //   const tagsAssigned: ContactTag[] = [];
 
-    contactIds.forEach((c: number) => {
-      tagsIds.forEach((t: number) => {
-        const assignedTag = this.contactTagRepositry.create({
-          contact: { id: c },
-          tag: { id: t }
-        });
+  //   contactIds.forEach((c: number) => {
+  //     tagsIds.forEach((t: number) => {
+  //       const assignedTag = this.contactTagRepositry.create({
+  //         contact: { id: c },
+  //         tag: { id: t }
+  //       });
 
-        tagsAssigned.push(assignedTag);
-      });
-    });
+  //       tagsAssigned.push(assignedTag);
+  //     });
+  //   });
 
-    const contactAssigned = await this.contactTagRepositry.save(tagsAssigned);
+  //   const contactAssigned = await this.contactTagRepositry.save(tagsAssigned);
 
-    return contactAssigned;
-  }
+  //   return contactAssigned;
+  // }
 
 
 
